@@ -1,0 +1,7 @@
+﻿/GeneralExcelToSql/bin/
+/GeneralExcelToSql/obj/
+/GeneralSetupProject/Debug/*.exe
+/GeneralSetupProject/Debug/*.msi
+/GeneralSetupProject/Release/*.exe
+/GeneralSetupProject/Release/*.msi
+/.vs/
