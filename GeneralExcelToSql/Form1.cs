@@ -408,6 +408,7 @@ namespace GeneralExcelToSql
                         int j = 1;
                         while (list.Contains(columnName))
                         {
+                            columnName = columnName.Split('_')[0];
                             columnName = columnName+"_"+j.ToString();//前列名相同，重新命名
                             j++;
                         }
