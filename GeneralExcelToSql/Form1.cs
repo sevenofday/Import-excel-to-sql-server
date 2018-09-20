@@ -405,9 +405,11 @@ namespace GeneralExcelToSql
                     {
                         string columnName = resultDt.Rows[0][i].ToString();
                         columnName = GetConvert(columnName);
-                        if (list.Contains(columnName))
+                        int j = 1;
+                        while (list.Contains(columnName))
                         {
-                            columnName += "_1";
+                            columnName = columnName+"_"+j.ToString();//前列名相同，重新命名
+                            j++;
                         }
                         list.Add(columnName);
 
