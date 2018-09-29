@@ -5,3 +5,5 @@
 /GeneralSetupProject/Release/*.exe
 /GeneralSetupProject/Release/*.msi
 /.vs/
+/Import-excel-to-sql-serverSetup Project/Debug/*.exe
+/Import-excel-to-sql-serverSetup Project/Release/*.exe
