@@ -15,7 +15,6 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.Globalization;
 using System.Threading;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
@@ -35,7 +34,7 @@ namespace GeneralExcelToSql
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Btn_ClickFile(object sender, EventArgs e)
         {
             //this.openFileDialog1.Filter = "*.*";
 
@@ -47,13 +46,13 @@ namespace GeneralExcelToSql
             
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void Btn_ClickFolder(object sender, EventArgs e)
         {
             folderBrowserDialog1.ShowDialog();
             textBox2.Text = folderBrowserDialog1.SelectedPath;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Btn_ClickGenerate(object sender, EventArgs e)
         {
             if (SourceFile.Text.Trim() == "")
             {
@@ -180,12 +179,11 @@ namespace GeneralExcelToSql
                 sw.Write(sql);             //在文本末尾写入文本 
                 sw.Flush();                    //清空 
                 sw.Close();                    //关闭 
-                return "";
+                return string.Empty;
             }catch(Exception ex)
             {
                 return ex.ToString();
             }
-            return "";
         }
 
         /// <summary>
@@ -216,14 +214,14 @@ namespace GeneralExcelToSql
                         string strError = GetEnglishBaidu(field, out strtemp);
                         if (strError != "")
                         {
-                            str = "";
+                            str = string.Empty;
                             return strError;
                         }
                         string[] k = strtemp.Split(';');
                         string[] j = field.Split(';');
                         if (k.Length != j.Length)
                         {
-                            str = "";
+                            str = string.Empty;
                             return "翻译生成单词和原来单词数量不一样";
                         }
                         for (int x = 0; x < k.Length; x++)
@@ -232,7 +230,7 @@ namespace GeneralExcelToSql
                             strDesc += "EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'" + j[x] + "' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'" + textBox1.Text.Trim() + "', @level2type=N'COLUMN',@level2name=N'" + k[x].Replace(" ", "") + "'\n GO \n";
                             strImport += "insert into Tb_ExcelImport_TableField(TableName,Field,ChinaField,FieldType) values('" + textBox1.Text.Trim() + "','" + k[x].Replace(" ", "") + "','" + j[x] + "','VARCHAR')\n";
                         }
-                        field = "";
+                        field = string.Empty;
                     }
                     else if (i == dtExcel.Columns.Count - 1)
                     {
@@ -240,14 +238,14 @@ namespace GeneralExcelToSql
                         string strError = GetEnglishBaidu(field, out strtemp);
                         if (strError != "")
                         {
-                            str = "";
+                            str = string.Empty;
                             return strError;
                         }
                         string[] k = strtemp.Split(';');
                         string[] j = field.Split(';');
                         if (k.Length!=j.Length)
                         {
-                            str = "";
+                            str = string.Empty;
                             return "翻译生成单词和原来单词数量不一样";
                         }
                         for (int x = 0; x < k.Length; x++)
@@ -256,18 +254,18 @@ namespace GeneralExcelToSql
                             strDesc += "EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'" + j[x] + "' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'" + textBox1.Text.Trim() + "', @level2type=N'COLUMN',@level2name=N'" + k[x].Replace(" ", "") + "'\n GO \n";
                             strImport += "insert into Tb_ExcelImport_TableField(TableName,Field,ChinaField,FieldType) values('" + textBox1.Text.Trim() + "','" + k[x].Replace(" ", "") + "','" + j[x] + "','VARCHAR')\n";
                         }
-                        field = "";
+                        field = string.Empty;
                     }
                 }
                 
                 char[] replace = { ',', '\n' };
                 str = strField.TrimEnd(replace) + "\n)\n" + strDesc + strImport;
-                return "";
+                return string.Empty;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-                str = "";
+                str = string.Empty;
                 return ex.ToString();
             }
             
@@ -306,7 +304,7 @@ namespace GeneralExcelToSql
                     JObject l= (JObject)JsonConvert.DeserializeObject(result);
                     JToken k = l["error_msg"];
                     str = k.ToString().Replace("\"", "");
-                    temp = "";
+                    temp =string.Empty;
                     return str;
                 }
                 JObject o = (JObject)JsonConvert.DeserializeObject(result);
@@ -317,11 +315,11 @@ namespace GeneralExcelToSql
                 TextInfo text = cultureInfo.TextInfo;
                 string toLower = text.ToLower(str);
                 temp = text.ToTitleCase(toLower);
-                return "";
+                return string.Empty;
             }
             catch (Exception ex)
             {
-                temp = "";
+                temp=string.Empty;
                 return ex.ToString();
             }
             
@@ -350,8 +348,7 @@ namespace GeneralExcelToSql
         public DataTable ExcelToDatatalbe(string fullFilename)//读取
         {
 
-            Workbook book = new Workbook();
-            book.Open(fullFilename);
+            Workbook book = new Workbook(fullFilename);
             DataSet resultDs = new DataSet();
             foreach (Worksheet ws in book.Worksheets)
             {
@@ -391,8 +388,7 @@ namespace GeneralExcelToSql
         /// <returns></returns>
         public DataTable GetExcelData(string strFile)
         {
-            Workbook book = new Workbook();
-            book.Open(strFile);
+            Workbook book = new Workbook(strFile);
             DataSet resultDs = new DataSet();
             foreach (Worksheet ws in book.Worksheets)
             {
@@ -515,6 +511,7 @@ namespace GeneralExcelToSql
             str = rgx.Replace(str, replacement);
             return str;
         }
+
     }
 
 }
